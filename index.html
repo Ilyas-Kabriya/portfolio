@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -406,6 +407,7 @@
             </div>
             <h1>Ilyas Kabriya</h1>
             <p>Creative Web Developer & Graphics Designer</p>
+            <p><a href="ikresume.pdf">My Resume</a></p>
             <div class="contact-info">
                 <div class="contact-item">
                     <i class="fas fa-map-marker-alt"></i>
@@ -612,80 +614,98 @@
     </div>
 
     <script>
-        // Tab switching functionality
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Remove active class from all tabs and contents
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-
-                // Add active class to clicked tab
-                tab.classList.add('active');
-
-                // Show corresponding content
-                const targetTab = tab.getAttribute('data-tab');
-                document.getElementById(targetTab).classList.add('active');
-            });
+    // Tab switching functionality
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active class from all tabs and contents
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            // Add active class to clicked tab
+            tab.classList.add('active');
+            // Show corresponding content
+            const targetTab = tab.getAttribute('data-tab');
+            document.getElementById(targetTab).classList.add('active');
         });
+    });
 
-        // Smooth scrolling and animations
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add entrance animation to elements
-            const animateElements = document.querySelectorAll('.project-card, .achievement-item, .skill-category');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            });
+    // Smooth scrolling and animations
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add entrance animation to elements
+        const animateElements = document.querySelectorAll('.project-card, .achievement-item, .skill-category');
 
-            animateElements.forEach(el => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                observer.observe(el);
-            });
-        });
-
-        // Add hover effects to project cards
-        const projectCards = document.querySelectorAll('.project-card');
-        projectCards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-5px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Add typing effect to the main title
-        const title = document.querySelector('.header h1');
-        const originalText = title.textContent;
-        title.textContent = '';
-        
-        function typeWriter(text, element, delay = 100) {
-            let i = 0;
-            function type() {
-                if (i < text.length) {
-                    element.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(type, delay);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
-            }
-            type();
+            });
+        });
+        animateElements.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    });
+
+    // Add hover effects to project cards
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-5px) scale(1.02)';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+
+    // Type and erase effect for the main title
+    const titleElement = document.querySelector('.header h1');
+    const texts = ["Ilyas Kabriya", "Web Developer"];
+    let textIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const typingSpeed = 150; // Milliseconds per character for typing
+    const deletingSpeed = 100; // Milliseconds per character for deleting
+    const delayBetweenTexts = 1500; // Milliseconds before typing or deleting starts
+
+    function typeWriterEffect() {
+        const currentText = texts[textIndex];
+
+        if (isDeleting) {
+            // Erasing text
+            titleElement.textContent = currentText.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            // Typing text
+            titleElement.textContent = currentText.substring(0, charIndex + 1);
+            charIndex++;
         }
 
-        // Start typing effect after a short delay
-        setTimeout(() => {
-            typeWriter(originalText, title, 150);
-        }, 500);
-    </script>
+        let speed = isDeleting ? deletingSpeed : typingSpeed;
+
+        if (!isDeleting && charIndex === currentText.length) {
+            // Done typing, set a longer pause before deleting
+            speed = delayBetweenTexts;
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            // Done deleting, move to the next text
+            isDeleting = false;
+            textIndex = (textIndex + 1) % texts.length; // Cycle through texts
+            speed = 500; // Shorter pause before typing the next text
+        }
+
+        setTimeout(typeWriterEffect, speed);
+    }
+
+    // Start the typing effect when the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        typeWriterEffect();
+    });
+</script>
 </body>
 </html>
